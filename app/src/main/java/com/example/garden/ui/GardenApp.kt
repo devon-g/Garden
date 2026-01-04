@@ -47,6 +47,7 @@ fun GardenApp(
     val gardenRepository = application.container.gardenRepository
 
     NavDisplay(
+        modifier = modifier,
         entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator()
@@ -59,8 +60,8 @@ fun GardenApp(
                     viewModel(factory = GardenViewModelFactory(gardenRepository))
                 GardenScreen(
                     onAddEntryClick = { backStack.add(PlantEntry) },
-                    onEditEntryClick = { id ->
-                        backStack.add(PlantEdit(id))
+                    onDetailClick = { id ->
+                        backStack.add(PlantDetails(id))
                     },
                     viewModel
                 )

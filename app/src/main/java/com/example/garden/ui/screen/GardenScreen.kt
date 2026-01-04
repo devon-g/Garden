@@ -1,10 +1,11 @@
 package com.example.garden.ui.screen
 
-import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -23,6 +24,7 @@ import com.example.garden.ui.viewmodel.GardenViewModel
 @Composable
 fun GardenScreen(
     onAddEntryClick: () -> Unit,
+    onDetailClick: (Int) -> Unit,
     viewModel: GardenViewModel,
     modifier: Modifier = Modifier,
 ) {
@@ -50,11 +52,18 @@ fun GardenScreen(
     ) { innerPadding ->
         LazyColumn(
             contentPadding = innerPadding,
-            modifier = Modifier.safeContentPadding()
         ) {
-            items(gardenUiState.plants) {
+            items(gardenUiState.plants) { plant ->
                 // TODO: Make a clickable card that navigates to a screen with more details
-                Text(text = it.species)
+                Card(
+                    modifier = Modifier.clickable {
+                        onDetailClick(plant.id)
+                    }
+                ) {
+                    Text(
+                        text = plant.species
+                    )
+                }
             }
         }
     }
