@@ -56,8 +56,8 @@ fun PlantEntryScreen(
             onClick = {
                 coroutineScope.launch {
                     viewModel.savePlant()
+                    onSaveClick()
                 }
-                onSaveClick()
             },
             updateUiState = viewModel::updateUiState,
             modifier = modifier
