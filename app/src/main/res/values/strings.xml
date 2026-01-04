@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Garden</string>
+    <string name="add_new_plant_entry">Add new Plant Entry</string>
 </resources>
