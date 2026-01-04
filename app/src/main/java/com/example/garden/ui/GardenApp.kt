@@ -2,7 +2,7 @@ package com.example.garden.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavKey
@@ -10,8 +10,8 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.example.garden.ui.theme.GardenTheme
-import com.example.garden.ui.view.GardenScreen
+import com.example.garden.GardenApplication
+import com.example.garden.ui.screen.GardenScreen
 import com.example.garden.ui.viewmodel.GardenViewModel
 import kotlinx.serialization.Serializable
 
@@ -30,6 +30,9 @@ fun GardenApp(modifier: Modifier = Modifier) {
 
     // Back stack that survives recomposition and configuration changes
     val backStack = rememberNavBackStack(Garden)
+    // TODO: Getting the application context inside the factory was giving null pointer.
+    //       figure out why
+    val application = LocalContext.current.applicationContext as GardenApplication
 
     NavDisplay(
         entryDecorators = listOf(
@@ -40,8 +43,11 @@ fun GardenApp(modifier: Modifier = Modifier) {
         onBack = { backStack.removeLastOrNull() },
         entryProvider = entryProvider {
             entry<Garden> {
-                val viewModel: GardenViewModel = viewModel(factory = AppViewModelProvider.Factory)
-                GardenScreen(viewModel)
+                val viewModel: GardenViewModel = viewModel(factory = application.viewModelProvider.factory)
+                GardenScreen(
+                    onAddEntryClick = { backStack.add(PlantEntry) },
+                    viewModel
+                )
             }
             entry<PlantEntry> {
                 //PlantEntryScreen()
@@ -51,12 +57,4 @@ fun GardenApp(modifier: Modifier = Modifier) {
             }
         }
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GardenAppPreview() {
-    GardenTheme {
-        GardenApp()
-    }
 }
