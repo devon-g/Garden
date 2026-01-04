@@ -2,6 +2,7 @@ package com.example.garden.ui.screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -9,16 +10,19 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.garden.R
 import com.example.garden.ui.GardenTopAppBar
 import com.example.garden.ui.viewmodel.PlantDetailViewModel
+import com.example.garden.ui.viewmodel.PlantDetails
 import kotlinx.coroutines.launch
 
 @Composable
@@ -30,8 +34,9 @@ fun PlantDetailScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val plantUiState by viewModel.plantUiState.collectAsState()
+
     Scaffold(
-        modifier = modifier,
+        modifier = modifier.fillMaxSize(),
         floatingActionButton = {
             Column() {
                 FloatingActionButton(
@@ -67,5 +72,27 @@ fun PlantDetailScreen(
                 onBackClick = navigateBack
             )
         },
-    ) { }
+    ) { innerPadding ->
+        PlantDetailBody(
+            plantDetails = plantUiState.plantDetails,
+            modifier = Modifier.padding(innerPadding)
+        )
+    }
+}
+
+@Composable
+fun PlantDetailBody(
+    plantDetails: PlantDetails,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+    ) {
+        // Basic show info
+        Text(plantDetails.species)
+        Text(plantDetails.lightLevel.name)
+        Text(plantDetails.needsDirectLight.toString())
+        Text(plantDetails.isNative.toString())
+        Text(plantDetails.notes)
+    }
 }

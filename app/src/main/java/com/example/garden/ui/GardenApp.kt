@@ -37,7 +37,7 @@ data object Garden : NavKey
 data object PlantEntry : NavKey
 
 @Serializable
-data class PlantDetails(val id: Int) : NavKey
+data class PlantDetail(val id: Int) : NavKey
 
 @Serializable
 data class PlantEdit(val id: Int) : NavKey
@@ -46,10 +46,6 @@ data class PlantEdit(val id: Int) : NavKey
 fun GardenApp(
     modifier: Modifier = Modifier
 ) {
-    // TODO: List plants in garden
-    //       Add entry to garden list
-    //       View details of garden entry
-
     // Back stack that survives recomposition and configuration changes
     val backStack = rememberNavBackStack(Garden)
     // TODO: Getting the application context inside the factory was giving null pointer.
@@ -72,7 +68,7 @@ fun GardenApp(
                 GardenScreen(
                     onAddEntryClick = { backStack.add(PlantEntry) },
                     onDetailClick = { id ->
-                        backStack.add(PlantDetails(id))
+                        backStack.add(PlantDetail(id))
                     },
                     viewModel
                 )
@@ -93,7 +89,7 @@ fun GardenApp(
                     navigateBack = { backStack.removeLastOrNull() }
                 )
             }
-            entry<PlantDetails> { key ->
+            entry<PlantDetail> { key ->
                 val viewModel: PlantDetailViewModel =
                     viewModel(factory = PlantDetailViewModelFactory(key.id, gardenRepository))
                 PlantDetailScreen(
