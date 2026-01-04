@@ -132,40 +132,43 @@ fun LightLevelDropDown(
     onValueChange: (PlantDetails) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // Local state so that the drop down knows when to appear and what was selected
     var expanded by remember { mutableStateOf(false) }
     var selected by remember { mutableStateOf(LightLevel.None) }
-    TextField(
-        value = selected.name,
-        onValueChange = {},
-        label = {
-            Text(text = stringResource(R.string.light_needed_field))
-        },
-        trailingIcon = {
-            Icon(
-                imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                contentDescription = null,
-                modifier = modifier.clickable { expanded = !expanded }
-            )
-        },
-        readOnly = true,
-        modifier = modifier.clickable { expanded = !expanded }
-    )
-    DropdownMenu(
-        expanded = expanded,
-        onDismissRequest = { expanded = false }
-    ) {
-        LightLevel.entries.forEach { level ->
-            DropdownMenuItem(
-                text = { Text(text = level.name) },
-                onClick = {
-                    // Actually store the new value
-                    onValueChange(plantDetails.copy(lightLevel = level))
 
-                    // Just visual
-                    selected = level
-                    expanded = false
-                }
-            )
+    Column(modifier = modifier) {
+        TextField(
+            value = selected.name,
+            onValueChange = {},
+            label = {
+                Text(text = stringResource(R.string.light_needed_field))
+            },
+            trailingIcon = {
+                Icon(
+                    imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                    contentDescription = null,
+                    modifier = modifier.clickable { expanded = !expanded }
+                )
+            },
+            readOnly = true,
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            LightLevel.entries.forEach { level ->
+                DropdownMenuItem(
+                    text = { Text(text = level.name) },
+                    onClick = {
+                        // Actually store the new value
+                        onValueChange(plantDetails.copy(lightLevel = level))
+
+                        // Just visual
+                        selected = level
+                        expanded = false
+                    }
+                )
+            }
         }
     }
 }
