@@ -2,7 +2,6 @@ package com.example.garden.ui.screen
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -59,7 +58,6 @@ fun PlantEditScreen(
             updateUiState = viewModel::updateUiState,
             modifier = modifier
                 .padding(innerPadding)
-                .safeContentPadding()
         )
     }
 }
