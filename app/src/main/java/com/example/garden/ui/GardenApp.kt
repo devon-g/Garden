@@ -12,13 +12,17 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.example.garden.GardenApplication
 import com.example.garden.ui.screen.GardenScreen
+import com.example.garden.ui.screen.PlantEntryScreen
 import com.example.garden.ui.viewmodel.GardenViewModel
+import com.example.garden.ui.viewmodel.PlantEntryViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable
 data object Garden : NavKey
+
 @Serializable
 data object PlantEntry : NavKey
+
 @Serializable
 data class PlantDetails(val id: Int) : NavKey
 
@@ -43,14 +47,20 @@ fun GardenApp(modifier: Modifier = Modifier) {
         onBack = { backStack.removeLastOrNull() },
         entryProvider = entryProvider {
             entry<Garden> {
-                val viewModel: GardenViewModel = viewModel(factory = application.viewModelProvider.factory)
+                val viewModel: GardenViewModel =
+                    viewModel(factory = application.viewModelProvider.factory)
                 GardenScreen(
                     onAddEntryClick = { backStack.add(PlantEntry) },
                     viewModel
                 )
             }
             entry<PlantEntry> {
-                //PlantEntryScreen()
+                val viewModel: PlantEntryViewModel =
+                    viewModel(factory = application.viewModelProvider.factory)
+                PlantEntryScreen(
+                    viewModel,
+                    onSaveClick = { backStack.remove(PlantEntry) },
+                )
             }
             entry<PlantDetails> { key ->
                 //PlantDetailsScreen()
