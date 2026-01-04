@@ -12,8 +12,10 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.example.garden.GardenApplication
 import com.example.garden.ui.screen.GardenScreen
+import com.example.garden.ui.screen.PlantEditScreen
 import com.example.garden.ui.screen.PlantEntryScreen
 import com.example.garden.ui.viewmodel.GardenViewModel
+import com.example.garden.ui.viewmodel.PlantEditViewModel
 import com.example.garden.ui.viewmodel.PlantEntryViewModel
 import kotlinx.serialization.Serializable
 
@@ -26,8 +28,13 @@ data object PlantEntry : NavKey
 @Serializable
 data class PlantDetails(val id: Int) : NavKey
 
+@Serializable
+data class PlantEdit(val id: Int) : NavKey
+
 @Composable
-fun GardenApp(modifier: Modifier = Modifier) {
+fun GardenApp(
+    modifier: Modifier = Modifier
+) {
     // TODO: List plants in garden
     //       Add entry to garden list
     //       View details of garden entry
@@ -37,6 +44,7 @@ fun GardenApp(modifier: Modifier = Modifier) {
     // TODO: Getting the application context inside the factory was giving null pointer.
     //       figure out why
     val application = LocalContext.current.applicationContext as GardenApplication
+    val gardenRepository = application.container.gardenRepository
 
     NavDisplay(
         entryDecorators = listOf(
@@ -48,22 +56,34 @@ fun GardenApp(modifier: Modifier = Modifier) {
         entryProvider = entryProvider {
             entry<Garden> {
                 val viewModel: GardenViewModel =
-                    viewModel(factory = application.viewModelProvider.factory)
+                    viewModel(factory = GardenViewModelFactory(gardenRepository))
                 GardenScreen(
                     onAddEntryClick = { backStack.add(PlantEntry) },
+                    onEditEntryClick = { id ->
+                        backStack.add(PlantEdit(id))
+                    },
                     viewModel
                 )
             }
             entry<PlantEntry> {
                 val viewModel: PlantEntryViewModel =
-                    viewModel(factory = application.viewModelProvider.factory)
+                    viewModel(factory = PlantEntryViewModelFactory(gardenRepository))
                 PlantEntryScreen(
                     viewModel,
-                    onSaveClick = { backStack.remove(PlantEntry) },
+                    onSaveClick = { backStack.removeLastOrNull() },
+                )
+            }
+            entry<PlantEdit> { key ->
+                val viewModel: PlantEditViewModel =
+                    viewModel(factory = PlantEditViewModelFactory(key.id, gardenRepository))
+                PlantEditScreen(
+                    viewModel,
+                    onSaveClick = { backStack.removeLastOrNull() }
                 )
             }
             entry<PlantDetails> { key ->
-                //PlantDetailsScreen()
+
+//                PlantDetailsScreen()
             }
         }
     )

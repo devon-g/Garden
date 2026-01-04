@@ -1,25 +1,36 @@
 package com.example.garden.ui
 
-import android.app.Application
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.garden.GardenApplication
+import com.example.garden.data.GardenRepository
 import com.example.garden.ui.viewmodel.GardenViewModel
+import com.example.garden.ui.viewmodel.PlantEditViewModel
 import com.example.garden.ui.viewmodel.PlantEntryViewModel
 
-class AppViewModelProvider(private val application: Application) {
-    val factory: ViewModelProvider.Factory = viewModelFactory {
-        // TODO: Provide view models with access to the application's repository
-        initializer {
-            GardenViewModel(
-                (application as GardenApplication).container.gardenRepository
-            )
-        }
-        initializer {
-            PlantEntryViewModel(
-                (application as GardenApplication).container.gardenRepository
-            )
-        }
+class GardenViewModelFactory(
+    private val gardenRepository: GardenRepository
+) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return GardenViewModel(gardenRepository) as T
+    }
+}
+
+class PlantEntryViewModelFactory(
+    private val gardenRepository: GardenRepository
+) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return PlantEntryViewModel(gardenRepository) as T
+    }
+}
+
+class PlantEditViewModelFactory(
+    private val plantId: Int,
+    private val gardenRepository: GardenRepository
+) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return PlantEditViewModel(plantId, gardenRepository) as T
     }
 }
