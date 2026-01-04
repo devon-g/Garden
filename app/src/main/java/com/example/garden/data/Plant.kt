@@ -23,8 +23,9 @@ data class Plant(
     @ColumnInfo
     val species: String,
 
-    @ColumnInfo
-    val synonyms: List<String>,
+    // TODO: Read about type converters to store complex data with room
+    //@ColumnInfo
+    //val synonyms: List<String>,
 
     @ColumnInfo
     val lightLevel: LightLevel,
