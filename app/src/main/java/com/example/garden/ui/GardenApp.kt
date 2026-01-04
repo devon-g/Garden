@@ -70,7 +70,7 @@ fun GardenApp(
                     viewModel(factory = PlantEntryViewModelFactory(gardenRepository))
                 PlantEntryScreen(
                     viewModel,
-                    onSaveClick = { backStack.removeLastOrNull() },
+                    navigateBack = { backStack.removeLastOrNull() },
                 )
             }
             entry<PlantEdit> { key ->
@@ -78,7 +78,7 @@ fun GardenApp(
                     viewModel(factory = PlantEditViewModelFactory(key.id, gardenRepository))
                 PlantEditScreen(
                     viewModel,
-                    onSaveClick = { backStack.removeLastOrNull() }
+                    navigateBack = { backStack.removeLastOrNull() }
                 )
             }
             entry<PlantDetails> { key ->

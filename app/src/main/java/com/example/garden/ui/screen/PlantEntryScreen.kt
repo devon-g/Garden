@@ -13,12 +13,16 @@ import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -44,27 +48,44 @@ import com.example.garden.ui.viewmodel.PlantUiState
 import kotlinx.coroutines.launch
 import kotlin.enums.EnumEntries
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlantEntryScreen(
     viewModel: PlantEntryViewModel,
-    onSaveClick: () -> Unit,
+    navigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
     val plantUiState by viewModel.plantUiState.collectAsState()
-    Scaffold(modifier.fillMaxSize()) { innerPadding ->
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(text = stringResource(R.string.plant_entry_screen_title))
+                },
+                navigationIcon = {
+                    IconButton(onClick = navigateBack) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = null
+                        )
+                    }
+                }
+            )
+        },
+        modifier = modifier.fillMaxSize().safeContentPadding()
+    ) { innerPadding ->
         PlantEntryBody(
             plantUiState = plantUiState,
-            onClick = {
+            onSaveClick = {
                 coroutineScope.launch {
                     viewModel.savePlant()
-                    onSaveClick()
+                    navigateBack()
                 }
             },
             updateUiState = viewModel::updateUiState,
             modifier = modifier
                 .padding(innerPadding)
-                .safeContentPadding()
         )
     }
 }
@@ -72,7 +93,7 @@ fun PlantEntryScreen(
 @Composable
 fun PlantEntryBody(
     plantUiState: PlantUiState,
-    onClick: () -> Unit,
+    onSaveClick: () -> Unit,
     updateUiState: (PlantDetails) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -88,7 +109,7 @@ fun PlantEntryBody(
             modifier = modifier
         )
         Button(
-            onClick = onClick
+            onClick = onSaveClick
         ) {
             Text(text = stringResource(R.string.save))
         }
@@ -223,7 +244,7 @@ fun <E : Enum<E>>EnumDropdownMenu(
 fun PreviewPlantEntryBody() {
     GardenTheme {
         PlantEntryBody(
-            onClick = {},
+            onSaveClick = {},
             plantUiState = PlantUiState(),
             updateUiState = {}
         )
