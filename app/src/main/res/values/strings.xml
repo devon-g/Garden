@@ -4,4 +4,5 @@
     <string name="save">Save</string>
     <string name="garden_screen_title">Saved Plants</string>
     <string name="species_field">Species</string>
+    <string name="light_needed_field">Light Needed</string>
 </resources>
