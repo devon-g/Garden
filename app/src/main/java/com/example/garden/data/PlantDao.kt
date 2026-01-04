@@ -19,7 +19,7 @@ interface PlantDao {
     suspend fun delete(plant: Plant)
 
     @Query("SELECT * from plants WHERE id = :id")
-    fun getPlant(id: Int): Flow<Plant>
+    fun getPlant(id: Int): Flow<Plant?>
 
     @Query("SELECT * from plants ORDER BY species ASC")
     fun getAllPlants(): Flow<List<Plant>>
