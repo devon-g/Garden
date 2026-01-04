@@ -40,6 +40,7 @@ import com.example.garden.ui.viewmodel.PlantDetails
 import com.example.garden.ui.viewmodel.PlantEntryViewModel
 import com.example.garden.ui.viewmodel.PlantUiState
 import kotlinx.coroutines.launch
+import kotlin.enums.EnumEntries
 
 @Composable
 fun PlantEntryScreen(
@@ -111,9 +112,13 @@ fun PlantDetailForm(
             singleLine = true
         )
         // Light Level Field
-        PlantLightLevelDropDown(
-            plantDetails = plantDetails,
-            onValueChange = updateUiState
+        EnumDropdownMenu(
+            labelResource = R.string.light_needed_field,
+            selected = plantDetails.lightLevel,
+            entries = LightLevel.entries,
+            onValueChange = { level: LightLevel ->
+                updateUiState(plantDetails.copy(lightLevel = level))
+            }
         )
         // Direct Light Field
         LabelSwitch(
@@ -156,21 +161,21 @@ fun LabelSwitch(
 }
 
 @Composable
-fun PlantLightLevelDropDown(
-    plantDetails: PlantDetails,
-    onValueChange: (PlantDetails) -> Unit,
+fun <E : Enum<E>>EnumDropdownMenu(
+    @StringRes labelResource: Int,
+    selected: E,
+    entries: EnumEntries<E>,
+    onValueChange: (E) -> Unit,
     modifier: Modifier = Modifier
 ) {
     // Local state so that the drop down knows when to appear and what was selected
     var expanded by remember { mutableStateOf(false) }
-    var selected by remember { mutableStateOf(LightLevel.None) }
-
     Column(modifier = modifier) {
         TextField(
             value = selected.name,
             onValueChange = {},
             label = {
-                Text(text = stringResource(R.string.light_needed_field))
+                Text(text = stringResource(labelResource))
             },
             trailingIcon = {
                 Icon(
@@ -185,15 +190,11 @@ fun PlantLightLevelDropDown(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            LightLevel.entries.forEach { level ->
+            entries.forEach { selection ->
                 DropdownMenuItem(
-                    text = { Text(text = level.name) },
+                    text = { Text(text = selection.name) },
                     onClick = {
-                        // Actually store the new value
-                        onValueChange(plantDetails.copy(lightLevel = level))
-
-                        // Just visual
-                        selected = level
+                        onValueChange(selection)
                         expanded = false
                     }
                 )
