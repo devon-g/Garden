@@ -7,4 +7,5 @@
     <string name="light_needed_field">Light Needed</string>
     <string name="direct_light_field">Direct Light Needed</string>
     <string name="native_plant_field">Native Plant</string>
+    <string name="notes_field">Notes</string>
 </resources>

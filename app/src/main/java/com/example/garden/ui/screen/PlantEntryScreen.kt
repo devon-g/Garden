@@ -62,7 +62,6 @@ fun PlantEntryScreen(
             updateUiState = viewModel::updateUiState,
             modifier = modifier
                 .padding(innerPadding)
-                .fillMaxWidth()
                 .safeContentPadding()
         )
     }
@@ -77,7 +76,7 @@ fun PlantEntryBody(
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(20.dp),
-        modifier = modifier
+        modifier = modifier.fillMaxSize()
     ) {
         PlantDetailForm(
             plantDetails = plantUiState.plantDetails,
@@ -100,7 +99,8 @@ fun PlantDetailForm(
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = modifier
+
+        modifier = modifier.fillMaxWidth()
     ) {
         // Species Field
         TextField(
@@ -109,7 +109,8 @@ fun PlantDetailForm(
                 updateUiState(plantDetails.copy(species = speciesValue))
             },
             label = { Text(text = stringResource(R.string.species_field)) },
-            singleLine = true
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth()
         )
         // Light Level Field
         EnumDropdownMenu(
@@ -118,7 +119,7 @@ fun PlantDetailForm(
             entries = LightLevel.entries,
             onValueChange = { level: LightLevel ->
                 updateUiState(plantDetails.copy(lightLevel = level))
-            }
+            },
         )
         // Direct Light Field
         LabelSwitch(
@@ -135,6 +136,15 @@ fun PlantDetailForm(
             onCheckedChange = { checked ->
                 updateUiState(plantDetails.copy(isNative = checked))
             }
+        )
+        // Notes Field
+        TextField(
+            value = plantDetails.notes,
+            onValueChange = { note ->
+                updateUiState(plantDetails.copy(notes = note))
+            },
+            label = { Text(text = stringResource(R.string.notes_field)) },
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }
@@ -181,10 +191,11 @@ fun <E : Enum<E>>EnumDropdownMenu(
                 Icon(
                     imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                     contentDescription = null,
-                    modifier = modifier.clickable { expanded = !expanded }
+                    modifier = Modifier.clickable { expanded = !expanded }
                 )
             },
             readOnly = true,
+            modifier = Modifier.fillMaxWidth()
         )
         DropdownMenu(
             expanded = expanded,
