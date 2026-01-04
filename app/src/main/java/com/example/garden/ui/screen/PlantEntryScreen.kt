@@ -1,9 +1,11 @@
 package com.example.garden.ui.screen
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -99,6 +101,7 @@ fun PlantDetailForm(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = modifier
     ) {
+        // Species Field
         TextField(
             value = plantDetails.species,
             onValueChange = { speciesValue ->
@@ -107,27 +110,53 @@ fun PlantDetailForm(
             label = { Text(text = stringResource(R.string.species_field)) },
             singleLine = true
         )
-        LightLevelDropDown(
+        // Light Level Field
+        PlantLightLevelDropDown(
             plantDetails = plantDetails,
             onValueChange = updateUiState
         )
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Text(text = "Direct Light Needed")
-            Switch(
-                checked = plantDetails.needsDirectLight,
-                onCheckedChange = { isChecked ->
-                    updateUiState(plantDetails.copy(needsDirectLight = isChecked))
-                }
-            )
-        }
+        // Direct Light Field
+        LabelSwitch(
+            labelResource = R.string.direct_light_field,
+            checked = plantDetails.needsDirectLight,
+            onCheckedChange = { checked ->
+                updateUiState(plantDetails.copy(needsDirectLight = checked))
+            }
+        )
+        // Direct Light Field
+        LabelSwitch(
+            labelResource = R.string.native_plant_field,
+            checked = plantDetails.isNative,
+            onCheckedChange = { checked ->
+                updateUiState(plantDetails.copy(isNative = checked))
+            }
+        )
     }
 }
 
 @Composable
-fun LightLevelDropDown(
+fun LabelSwitch(
+    @StringRes labelResource: Int,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = modifier
+    ) {
+        Text(text = stringResource(labelResource))
+        Spacer(modifier = Modifier.weight(1F))
+        Switch(
+            checked = checked,
+            onCheckedChange = onCheckedChange
+        )
+    }
+}
+
+@Composable
+fun PlantLightLevelDropDown(
     plantDetails: PlantDetails,
     onValueChange: (PlantDetails) -> Unit,
     modifier: Modifier = Modifier

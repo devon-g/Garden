@@ -5,4 +5,6 @@
     <string name="garden_screen_title">Saved Plants</string>
     <string name="species_field">Species</string>
     <string name="light_needed_field">Light Needed</string>
+    <string name="direct_light_field">Direct Light Needed</string>
+    <string name="native_plant_field">Native Plant</string>
 </resources>
