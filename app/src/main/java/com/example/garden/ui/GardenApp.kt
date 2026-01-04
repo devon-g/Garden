@@ -12,9 +12,11 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.example.garden.GardenApplication
 import com.example.garden.ui.screen.GardenScreen
+import com.example.garden.ui.screen.PlantDetailScreen
 import com.example.garden.ui.screen.PlantEditScreen
 import com.example.garden.ui.screen.PlantEntryScreen
 import com.example.garden.ui.viewmodel.GardenViewModel
+import com.example.garden.ui.viewmodel.PlantDetailViewModel
 import com.example.garden.ui.viewmodel.PlantEditViewModel
 import com.example.garden.ui.viewmodel.PlantEntryViewModel
 import kotlinx.serialization.Serializable
@@ -83,8 +85,15 @@ fun GardenApp(
                 )
             }
             entry<PlantDetails> { key ->
-
-//                PlantDetailsScreen()
+                val viewModel: PlantDetailViewModel =
+                    viewModel(factory = PlantDetailViewModelFactory(key.id, gardenRepository))
+                PlantDetailScreen(
+                    viewModel,
+                    navigateBack = { backStack.removeLastOrNull() },
+                    onEditEntryClick = { id ->
+                        backStack.add(PlantEdit(id))
+                    },
+                )
             }
         }
     )

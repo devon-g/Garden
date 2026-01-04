@@ -10,4 +10,6 @@
     <string name="notes_field">Notes</string>
     <string name="plant_entry_screen_title">Add New Plant</string>
     <string name="plant_edit_screen_title">Edit Plant</string>
+    <string name="delete_plant_entry">Delete this plant entry</string>
+    <string name="plant_detail_screen_title">Plant Details</string>
 </resources>
