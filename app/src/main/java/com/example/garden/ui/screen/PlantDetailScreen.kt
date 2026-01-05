@@ -16,7 +16,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.garden.R
@@ -89,6 +88,7 @@ fun PlantDetailBody(
         modifier = modifier
     ) {
         // Basic show info
+        Text(plantDetails.id.toString())
         Text(plantDetails.species)
         Text(plantDetails.lightLevel.name)
         Text(plantDetails.needsDirectLight.toString())

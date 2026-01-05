@@ -118,7 +118,7 @@ fun GardenTopAppBar(
         },
         navigationIcon = {
             if (canGoBack) {
-                IconButton(onClick = onBackClick ) {
+                IconButton(onClick = onBackClick) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = null

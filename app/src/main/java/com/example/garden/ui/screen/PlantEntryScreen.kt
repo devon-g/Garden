@@ -183,7 +183,7 @@ fun LabelSwitch(
 }
 
 @Composable
-fun <E : Enum<E>>EnumDropdownMenu(
+fun <E : Enum<E>> EnumDropdownMenu(
     @StringRes labelResource: Int,
     selected: E,
     entries: EnumEntries<E>,

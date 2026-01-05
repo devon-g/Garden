@@ -48,7 +48,7 @@ fun GardenScreen(
         }
     ) { innerPadding ->
         LazyColumn(
-            contentPadding = innerPadding,
+            contentPadding = innerPadding
         ) {
             items(gardenUiState.plants) { plant ->
                 // TODO: Make a clickable card that navigates to a screen with more details
