@@ -12,7 +12,13 @@ import kotlinx.coroutines.flow.stateIn
 class GardenViewModel(private val gardenRepository: GardenRepository) : ViewModel() {
     // Get plants from data repository by subscribing and converting Flow to StateFlow so that
     // the UI reacts when the list of items changes
-    val gardenUiState: StateFlow<GardenUiState> = gardenRepository.getAllPlantsStream().map { GardenUiState(it) }
+    val gardenUiState: StateFlow<GardenUiState> = gardenRepository.getAllPlantsStream().map { plants ->
+            GardenUiState(
+                plants.map { plant ->
+                    plant.toPlantDetails()
+                }
+            )
+        }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
@@ -25,5 +31,5 @@ class GardenViewModel(private val gardenRepository: GardenRepository) : ViewMode
 }
 
 data class GardenUiState(
-    val plants: List<Plant> = listOf()
+    val plants: List<PlantDetails> = listOf()
 )
