@@ -2,7 +2,7 @@
     <string name="app_name">Garden</string>
     <string name="add_new_plant_entry">Add new Plant Entry</string>
     <string name="save">Save</string>
-    <string name="garden_screen_title">Saved Plants</string>
+    <string name="garden_screen_title">My Garden</string>
     <string name="species_field">Species</string>
     <string name="light_needed_field">Light Needed</string>
     <string name="direct_light_field">Direct Light Needed</string>
