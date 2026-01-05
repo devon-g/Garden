@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase
 /**
  * Singleton database holder.
  */
-@Database(entities = [Plant::class], version = 1, exportSchema = false)
+@Database(entities = [Plant::class], version = 2, exportSchema = false)
 abstract class GardenDatabase : RoomDatabase() {
     abstract fun plantDao(): PlantDao
 
@@ -20,7 +20,7 @@ abstract class GardenDatabase : RoomDatabase() {
             // If an instance does not already exist, create a new one
             return Instance ?: synchronized(this) {
                 Room.databaseBuilder(context, GardenDatabase::class.java, "garden_database")
-                    .fallbackToDestructiveMigration(dropAllTables = false)
+                    .fallbackToDestructiveMigration(dropAllTables = true)
                     .build()
                     .also { Instance = it }
             }

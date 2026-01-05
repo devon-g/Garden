@@ -60,7 +60,7 @@ fun Plant.toPlantUiState(isEntryValid: Boolean = false): PlantUiState = PlantUiS
 fun Plant.toPlantDetails(): PlantDetails = PlantDetails(
     id = id,
     species = species,
-    //synonyms = synonyms,
+    synonym = synonyms,
     lightLevel = lightLevel,
     needsDirectLight = needsDirectLight,
     isNative = isNative,

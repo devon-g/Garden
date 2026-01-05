@@ -90,6 +90,7 @@ fun PlantDetailBody(
         // Basic show info
         Text(plantDetails.id.toString())
         Text(plantDetails.species)
+        Text(plantDetails.synonym)
         Text(plantDetails.lightLevel.name)
         Text(plantDetails.needsDirectLight.toString())
         Text(plantDetails.isNative.toString())

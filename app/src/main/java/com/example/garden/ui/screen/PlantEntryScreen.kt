@@ -124,6 +124,16 @@ fun PlantDetailForm(
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
+        // Species Field
+        TextField(
+            value = plantDetails.synonym,
+            onValueChange = { synonymValue ->
+                updateUiState(plantDetails.copy(synonym = synonymValue))
+            },
+            label = { Text(text = stringResource(R.string.synonym_field)) },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth()
+        )
         // Light Level Field
         EnumDropdownMenu(
             labelResource = R.string.light_needed_field,

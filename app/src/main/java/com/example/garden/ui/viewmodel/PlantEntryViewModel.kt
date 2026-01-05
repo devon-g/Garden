@@ -40,7 +40,7 @@ data class PlantUiState(
 data class PlantDetails(
     val id: Int = 0,
     val species: String = "",
-    //val synonyms: List<String> = listOf(),
+    val synonym: String = "",
     val lightLevel: LightLevel = LightLevel.None,
     val needsDirectLight: Boolean = false,
     val isNative: Boolean = false,
@@ -53,7 +53,7 @@ data class PlantDetails(
 fun PlantDetails.toPlant(): Plant = Plant(
     id = id,
     species = species,
-    //synonyms = synonyms,
+    synonyms = synonym,
     lightLevel = lightLevel,
     needsDirectLight = needsDirectLight,
     isNative = isNative,
