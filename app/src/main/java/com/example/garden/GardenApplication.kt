@@ -1,17 +1,25 @@
 package com.example.garden
 
 import android.app.Application
-import com.example.garden.data.AppContainer
-import com.example.garden.data.AppDataContainer
+import com.example.garden.di.dataModule
+import com.example.garden.di.viewModelModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
 
 /**
  * Application to contain
  */
 class GardenApplication : Application() {
-    lateinit var container: AppContainer
-
     override fun onCreate() {
         super.onCreate()
-        container = AppDataContainer(this)
+        startKoin {
+            androidLogger()
+            androidContext(this@GardenApplication)
+            modules(
+                dataModule,
+                viewModelModule
+            )
+        }
     }
 }

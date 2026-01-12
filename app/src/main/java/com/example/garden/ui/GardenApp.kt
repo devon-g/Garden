@@ -10,25 +10,20 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.example.garden.GardenApplication
 import com.example.garden.ui.screen.GardenScreen
 import com.example.garden.ui.screen.PlantDetailScreen
 import com.example.garden.ui.screen.PlantEditScreen
 import com.example.garden.ui.screen.PlantEntryScreen
-import com.example.garden.ui.viewmodel.GardenViewModel
-import com.example.garden.ui.viewmodel.PlantDetailViewModel
-import com.example.garden.ui.viewmodel.PlantEditViewModel
-import com.example.garden.ui.viewmodel.PlantEntryViewModel
 import kotlinx.serialization.Serializable
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Serializable
 data object Garden : NavKey
@@ -48,10 +43,6 @@ fun GardenApp(
 ) {
     // Back stack that survives recomposition and configuration changes
     val backStack = rememberNavBackStack(Garden)
-    // TODO: Getting the application context inside the factory was giving null pointer.
-    //       figure out why
-    val application = LocalContext.current.applicationContext as GardenApplication
-    val gardenRepository = application.container.gardenRepository
 
     NavDisplay(
         modifier = modifier,
@@ -63,37 +54,29 @@ fun GardenApp(
         onBack = { backStack.removeLastOrNull() },
         entryProvider = entryProvider {
             entry<Garden> {
-                val viewModel: GardenViewModel =
-                    viewModel(factory = GardenViewModelFactory(gardenRepository))
                 GardenScreen(
                     onAddEntryClick = { backStack.add(PlantEntry) },
                     onDetailClick = { id ->
                         backStack.add(PlantDetail(id))
                     },
-                    viewModel
+                    viewModel = koinViewModel()
                 )
             }
             entry<PlantEntry> {
-                val viewModel: PlantEntryViewModel =
-                    viewModel(factory = PlantEntryViewModelFactory(gardenRepository))
                 PlantEntryScreen(
-                    viewModel,
+                    koinViewModel(),
                     navigateBack = { backStack.removeLastOrNull() },
                 )
             }
             entry<PlantEdit> { key ->
-                val viewModel: PlantEditViewModel =
-                    viewModel(factory = PlantEditViewModelFactory(key.id, gardenRepository))
                 PlantEditScreen(
-                    viewModel,
+                    viewModel = koinViewModel { parametersOf(key.id) },
                     navigateBack = { backStack.removeLastOrNull() }
                 )
             }
             entry<PlantDetail> { key ->
-                val viewModel: PlantDetailViewModel =
-                    viewModel(factory = PlantDetailViewModelFactory(key.id, gardenRepository))
                 PlantDetailScreen(
-                    viewModel,
+                    viewModel = koinViewModel { parametersOf(key.id) },
                     navigateBack = { backStack.removeLastOrNull() },
                     onEditEntryClick = { id ->
                         backStack.add(PlantEdit(id))
@@ -109,8 +92,8 @@ fun GardenApp(
 fun GardenTopAppBar(
     @StringRes titleResource: Int,
     canGoBack: Boolean,
-    onBackClick: () -> Unit = {},
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBackClick: () -> Unit = {}
 ) {
     CenterAlignedTopAppBar(
         title = {
